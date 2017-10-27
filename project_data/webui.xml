@@ -1,0 +1,13 @@
+<config xmlns="http://tail-f.com/ns/config/1.0">
+  <webui xmlns="http://tail-f.com/ns/webui">
+  <applications xmlns="http://tail-f.com/ns/webui-one">
+  <application>
+    <id>BGP Flowspec</id>
+    <href>http://localhost:8080/webui-one/ConfigurationEditor/bgpflowspec:bgp-flowspec</href>
+    <title>BGP Flowspec</title>
+    <description>Create and modify BGP Flowspec definitions</description>
+    <category>Configuration</category>
+  </application>
+  </applications>
+  </webui>
+</config>

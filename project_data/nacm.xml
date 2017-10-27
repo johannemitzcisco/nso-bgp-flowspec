@@ -1,0 +1,103 @@
+<config xmlns="http://tail-f.com/ns/config/1.0">
+  <nacm xmlns="urn:ietf:params:xml:ns:yang:ietf-netconf-acm">
+    <enable-nacm>true</enable-nacm>
+    <read-default>deny</read-default>
+    <write-default>deny</write-default>
+    <exec-default>permit</exec-default>
+    <groups>
+      <group>
+        <name>admin</name>
+        <user-name>admin</user-name>
+        <user-name>private</user-name>
+      </group>
+      <group>
+        <name>oper</name>
+        <user-name>oper</user-name>
+        <user-name>public</user-name>
+      </group>
+    </groups>
+    <rule-list>
+      <name>admin</name>
+      <group>admin</group>
+      <rule>
+        <name>any-access</name>
+        <action>permit</action>
+      </rule>
+      <cmdrule xmlns="http://tail-f.com/yang/acm">
+        <name>any-command</name>
+        <action>permit</action>
+      </cmdrule>
+    </rule-list>
+    <rule-list>
+      <name>any-group</name>
+      <group>*</group>
+      <rule>
+        <name>tailf-aaa-password-change</name>
+        <module-name>tailf-aaa</module-name>
+        <path>/aaa/authentication/users/user[name='$USER']/change-password</path>
+        <access-operations>read exec</access-operations>
+        <action>permit</action>
+      </rule>
+      <rule>
+        <name>tailf-aaa-user</name>
+        <module-name>tailf-aaa</module-name>
+        <path>/user[name='$USER']</path>
+        <access-operations>create read update delete</access-operations>
+        <action>permit</action>
+      </rule>
+      <rule>
+        <name>tailf-webui-user</name>
+        <module-name>tailf-webui</module-name>
+        <path>/webui/data-stores/user-profile[username='$USER']</path>
+        <access-operations>create read update delete</access-operations>
+        <action>permit</action>
+      </rule>
+      <cmdrule xmlns="http://tail-f.com/yang/acm">
+        <name>c-logout</name>
+        <command>logout</command>
+        <action>deny</action>
+      </cmdrule>
+      <cmdrule xmlns="http://tail-f.com/yang/acm">
+        <name>j-logout</name>
+        <command>request system logout</command>
+        <action>deny</action>
+      </cmdrule>
+    </rule-list>
+    <rule-list>
+      <name>oper</name>
+      <group>oper</group>
+      <rule>
+        <name>bgpflowspec</name>
+        <module-name>*</module-name>
+        <path>/bgp-flowspec</path>
+        <access-operations>*</access-operations>
+        <action>permit</action>
+        <context xmlns="http://tail-f.com/yang/acm">*</context>
+      </rule>
+      <rule>
+        <name>webui-BGPFlowspec</name>
+        <module-name>*</module-name>
+        <path>/webui/webui-one:applications/application[id='BGP Flowspec']</path>
+        <access-operations>*</access-operations>
+        <action>permit</action>
+        <context xmlns="http://tail-f.com/yang/acm">*</context>
+      </rule>
+      <rule>
+        <name>webui-ServiceManager</name>
+        <module-name>*</module-name>
+        <path>/webui/webui-one:applications/application[id='Service manager']</path>
+        <access-operations>*</access-operations>
+        <action>permit</action>
+        <context xmlns="http://tail-f.com/yang/acm">*</context>
+      </rule>
+      <rule>
+        <name>devices</name>
+        <module-name>*</module-name>
+        <path>/devices</path>
+        <access-operations>*</access-operations>
+        <action>permit</action>
+        <context xmlns="http://tail-f.com/yang/acm">*</context>
+      </rule>
+    </rule-list>
+  </nacm>
+</config>

@@ -1,0 +1,26 @@
+{
+  "data": {
+    "bgpflowspec:bgp-flowspec": [
+      {
+        "name": "Demo",
+        "device": ["asr-ber0", "asr-ber1"],
+        "description": "Bad actor 5 - redirect to FW",
+        "traffic-rule": [
+          {
+            "ip-address": "168.21.23.56",
+            "mask": "255.255.255.0",
+            "rule-type": "source",
+            "description": "Barney Rubble"
+          },
+          {
+            "ip-address": "168.45.21.34",
+            "mask": "255.255.255.0",
+            "rule-type": "source",
+            "description": "Fred Flinstone"
+          }
+        ],
+        "redirect-ip-address": "10.95.5.3"
+      }
+    ]
+  }
+}

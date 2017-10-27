@@ -1,0 +1,125 @@
+module bgpflowspec {
+
+  namespace "http://example.com/bgpflowspec";
+  prefix bgpflowspec;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import tailf-common {
+    prefix tailf;
+  }
+  import tailf-ncs {
+    prefix ncs;
+  }
+  import tailf-kicker {
+    prefix kicker;
+  }
+//  import tailf-ned-cisco-ios-xr {
+//    prefix cisco-ios-xr;
+//  }
+
+
+  description
+    "Configure BGP Flowspec on one or more devices";
+
+  revision 2016-01-01 {
+    description
+      "Initial revision.";
+  }
+
+  list bgp-flowspec {
+    description "BGP Flowspec Rule Service";
+    leaf ticket {
+	  type string;
+    }
+    key name;
+    leaf name {
+      tailf:info "Unique matching rule name";
+      type string;
+    }
+
+    uses ncs:service-data;
+    ncs:servicepoint bgpflowspec-servicepoint;
+
+    leaf-list device {
+      tailf:info "List of Devices to apply this rule to";
+      type leafref {
+        path "/ncs:devices/ncs:device/ncs:name";
+      }
+    }
+
+    leaf match {
+      tailf:info "Type of matching to perform";
+      type enumeration {
+        enum match-all {
+          tailf:info "Logical-AND all matching statements under "+
+            "this classmap";
+        }
+        enum match-any {
+          tailf:info "Logical-OR all matching statements under this "+
+            "classmap";
+        }
+      }
+      default match-all;
+    }
+
+    leaf description {
+      tailf:info "Class-Map description";
+      type string {
+        tailf:info "LINE;;Description of this class-map (up to 200 "+
+          "characters)";
+      }
+    }
+
+    list traffic-rule {
+      key "ip-address mask";
+      tailf:info "Traffic rule information"; 
+      leaf rule-type {
+        type enumeration {
+          enum source;
+          enum destination;
+        }
+      }
+      leaf description {
+        type string;
+      }
+      leaf ip-address {
+        type inet:ipv4-address;
+      }
+      leaf mask {
+        type inet:ipv4-address;
+      }
+    }
+
+    leaf redirect-ip-address {
+      tailf:info "IP Address to redirect to";
+      type inet:ipv4-address;
+    }
+
+//    list audit {
+//      key timestamp;
+//      leaf timestamp {
+//        type decimal64 {
+//          fraction-digits 6;
+//        }
+//      }
+//      leaf service-name {
+//        type string;
+//      }
+//      leaf user {
+//        type string;
+//      }
+//      leaf configuration {
+//        type string;
+//      }
+//    }
+
+//    tailf:action auditentry {
+//      tailf:actionpoint bgpaudit-action;
+//      input {
+//        uses kicker:action-input-params;
+//      }
+//    }
+  }
+}

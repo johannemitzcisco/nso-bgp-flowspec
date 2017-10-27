@@ -1,0 +1,57 @@
+<config-template xmlns="http://tail-f.com/ns/config/1.0">
+  <devices xmlns="http://tail-f.com/ns/ncs">
+  <device>
+    <name>{/device}</name>
+      <config>
+        <class-map xmlns="http://tail-f.com/ned/cisco-ios-xr">
+          <name>{/name}</name>
+          <type>traffic</type>
+          <prematch>{/match}</prematch>
+          <match>
+            <destination-address foreach="{/traffic-rule[rule-type='destination']}">
+              <ipv4>
+                <address>{ip-address}</address>
+                <mask>{mask}</mask>
+              </ipv4>
+            </destination-address>
+            <source-address foreach="{/traffic-rule[rule-type='source']}">
+              <ipv4>
+                <address>{ip-address}</address>
+                <mask>{mask}</mask>
+              </ipv4>
+            </source-address>
+          </match>
+        </class-map>
+        <policy-map xmlns="http://tail-f.com/ned/cisco-ios-xr">
+          <name>POLICY-{/name}</name>
+          <type>pbr</type>
+          <class>
+            <class-ref>
+              <map>{/name}</map>
+              <type>traffic</type>
+              <redirect>
+                <nexthop>
+                  <IPv4-address>{/redirect-ip-address}</IPv4-address>
+                </nexthop>
+              </redirect>
+            </class-ref>
+            <class-default>
+              <map>class-default</map>
+              <type>traffic</type>
+            </class-default>
+          </class>
+        </policy-map>
+        <flowspec xmlns="http://tail-f.com/ned/cisco-ios-xr">
+          <address-family>
+            <ipv4>
+              <service-policy>
+                <name>POLICY-{/name}</name>
+                <type>pbr</type>
+              </service-policy>
+            </ipv4>
+          </address-family>
+        </flowspec>
+      </config>
+  </device>
+  </devices>
+</config-template>

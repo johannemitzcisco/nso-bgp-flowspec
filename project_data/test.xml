@@ -1,0 +1,31 @@
+<config xmlns="http://tail-f.com/ns/config/1.0">
+  <bgp-flowspec xmlns="http://example.com/bgpflowspec">
+    <name>Blackhole</name>
+    <device>asr-nyc0</device>
+    <device>asr-nyc1</device>
+    <device>asr-sfo0</device>
+    <device>asr-sfo1</device>
+    <device>asr-lon0</device>
+    <match>match-all</match>
+    <description>Direct bad traffic to black hole</description>
+    <traffic-rule>
+      <ip-address>87.33.22.123</ip-address>
+      <mask>255.255.255.0</mask>
+      <rule-type>source</rule-type>
+      <description>NK bad actors</description>
+    </traffic-rule>
+    <traffic-rule>
+      <ip-address>56.76.45.27</ip-address>
+      <mask>255.255.255.0</mask>
+      <rule-type>destination</rule-type>
+      <description>Malware controller</description>
+    </traffic-rule>
+    <traffic-rule>
+      <ip-address>23.45.23.11</ip-address>
+      <mask>255.255.255.0</mask>
+      <rule-type>source</rule-type>
+      <description>Aunt alice's hacked laptop</description>
+    </traffic-rule>
+    <redirect-ip-address>10.23.2.3</redirect-ip-address>
+  </bgp-flowspec>
+</config>
